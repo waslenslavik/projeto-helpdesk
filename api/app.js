@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const dbconnection = require('./dbconnection');
+const bcrypt = require('bcrypt');
+const db = require('./dbconnection');
 const userRegistrationAPI = require('./userRegistrationAPI');
 
 const app = express();
@@ -24,6 +25,28 @@ app.get('/login', (req, res) => {
 
 app.get('/cadastro', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'cadastro', 'cadastro.html'));
+});
+
+app.post('/api/cadastro', (req,res) => {
+    const {nome, senha} = req.body;
+
+    bcrypt.hash(senha, 10, (err, hash) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Erro ao cadastrar usuário'});
+        }
+
+        const usuario = {nome, senha:hash};
+
+        db.query('INSERT INTO usuarios (nome, senha) VALUES (?, ?)', [usuario.nome, usuario.senha], (dbErr, results) => {
+            if (dbErr) {
+                console.error(dbErr);
+                return res.status(500).json({ error: 'Erro ao cadastrar usuário.' });
+            }
+            
+            return res.status(201).json({ message: 'Usuario cadastrado com sucesso' });
+        });
+    });
 });
 
 const port = process.env.PORT || 3001;

@@ -7,7 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/cadastro', (req, res) => {
+app.post('/api/cadastro', (req, res) => {
     const { nome, senha } = req.body;
 
     const usuario = { nome, senha };
@@ -23,7 +23,7 @@ app.post('/cadastro', (req, res) => {
 });
 
 
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
     const { nome, senha } = req.body;
 
     db.query('SELECT * FROM usuarios WHERE nome = ? AND senha = ?', [nome, senha], (err, results) => {
