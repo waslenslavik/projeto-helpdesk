@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 
-//Configuração do banco de dados
+// Configuração do banco de dados
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'admin',
@@ -8,12 +8,12 @@ const db = mysql.createConnection({
     database: 'users'
 });
 
-//Conexão DB
-db.connect((err) =>{
+// Conexão DB
+db.connect((err) => {
     if (err) {
         throw err;
     }
-    console.log('Conexão com o DB estabelecida.')
+    console.log('Conexão com o DB estabelecida.');
 });
 
 module.exports = db;
